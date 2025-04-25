@@ -1,0 +1,33 @@
+# Fichier sh sous extension txt pour passer les antivirus.
+
+commande
+  --> résultat
+  #Commentaire
+
+#################################################################################
+# Installation du Neo4J
+#################################################################################
+
+docker run -d --name neo4j -p 7474:7474 -p 7687:7687 neo4j:5.21.0
+
+#################################################################################
+# Accès aux outils
+#################################################################################
+
+docker container ls
+  --> CONTAINER ID   IMAGE          COMMAND                  CREATED       STATUS          PORTS                                                      NAMES
+  --> e99d34eb5f34   neo4j:5.21.0   "tini -g -- /startup…"   3 weeks ago   Up 18 seconds   0.0.0.0:7474->7474/tcp, 7473/tcp, 0.0.0.0:7687->7687/tcp   neo4j
+
+dans un navigateur web : http://localhost:7474/browser/ 
+Username : neo4j
+Password : neo4j
+Définir un nouveau mot de passe : neo4jneo
+
+
+#################################################################################
+# Arrêt / redémarrage
+#################################################################################
+
+docker start neo4j
+
+docker stop neo4j

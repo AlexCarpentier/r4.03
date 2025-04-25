@@ -1,0 +1,63 @@
+# Fichier sh sous extension txt pour passer les antivirus.
+
+commande
+  --> résultat
+  #Commentaire
+
+#################################################################################
+# Installation du Redis
+#################################################################################
+
+docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+#Premier lancement de la commande, il télécharge Redis
+  --> Unable to find image 'redis/redis-stack:latest' locally
+  --> latest: Pulling from redis/redis-stack
+  --> 7646c8da3324: Pull complete
+  --> 8afc1abdbffd: Pull complete
+  --> 4f4fb700ef54: Pull complete
+  --> c5a81569f394: Pull complete
+  --> 53a912ce3306: Pull complete
+  --> 19efc780a46b: Pull complete
+  --> fea0f7bb5edd: Pull complete
+  --> 188c2a5a04fe: Pull complete
+  --> db083e8554ff: Pull complete
+  --> 039681272aec: Pull complete
+  --> 3a1f5577c49a: Pull complete
+  --> 12fb390a7174: Pull complete
+  --> f3ebb3f46028: Pull complete
+  --> debe98b23374: Pull complete
+  --> 17d2dee8da2f: Pull complete
+  --> Digest: sha256:dabd731cfebd2a7721ff1918257e08bff2b66963b938e796916cac53542ad003
+  --> Status: Downloaded newer image for redis/redis-stack:latest
+#Puis le déploie : Si 2ème lancement après erreur, seule cette ligne est affichée :
+  --> 66f7efea8a58c293863e4f54fa7f74ef1419ca9e5df14610495befdc569f5520
+
+
+#################################################################################
+# Accès aux outils
+#################################################################################
+
+docker container ls
+  --> CONTAINER ID   IMAGE                      COMMAND            CREATED       STATUS          PORTS                                            NAMES
+  --> 9e67a374b18c   redis/redis-stack:latest   "/entrypoint.sh"   3 weeks ago   Up 10 seconds   0.0.0.0:6379->6379/tcp, 0.0.0.0:8001->8001/tcp   redis-stack
+
+#Ligne de commande
+docker exec -it redis-stack redis-cli
+127.0.0.1:6379> SET mykey myvalue
+  --> OK
+127.0.0.1:6379> GET mykey
+  --> "myvalue"
+
+
+#Navigateur web
+
+dans un navigateur web : http://127.0.0.1:8001/
+
+
+#################################################################################
+# Arrêt / redémarrage
+#################################################################################
+
+docker start redis-stack
+
+docker stop redis-stack

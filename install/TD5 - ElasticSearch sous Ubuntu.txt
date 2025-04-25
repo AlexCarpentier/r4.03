@@ -1,0 +1,196 @@
+# Fichier sh sous extension txt pour passer les antivirus.
+
+commande
+  --> résultat
+  #Commentaire
+
+#################################################################################
+# Installation de docker
+#################################################################################
+
+#Note : sous MacOS, retirez les double quotes " et les !
+export ELASTIC_PASSWORD="ElasPwd25!"
+echo $ELASTIC_PASSWORD
+  --> ElasPwd25!
+
+docker network create elastic-net
+
+docker run -p 127.0.0.1:9200:9200 -d --name elasticsearch --network elastic-net -e ELASTIC_PASSWORD=$ELASTIC_PASSWORD -e "discovery.type=single-node" -e "xpack.security.http.ssl.enabled=false" -e "xpack.license.self_generated.type=basic" docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+
+#Premier lancement de la commande, il télécharge ElasticSearch
+  --> Unable to find image 'docker.elastic.co/elasticsearch/elasticsearch:8.14.3' locally
+  --> 8.14.3: Pulling from elasticsearch/elasticsearch
+  --> bef9b66d64c1: Pull complete
+  --> 0466e7fc688b: Pull complete
+  --> 46c5d55fb391: Pull complete
+  --> 4ca545ee6d5d: Pull complete
+  --> cd50452effda: Pull complete
+  --> 7448afce5a30: Pull complete
+  --> eb4e903fec4a: Pull complete
+  --> eb455ecbadeb: Pull complete
+  --> 271d322830d8: Pull complete
+  --> 8b570f235ae0: Pull complete
+  --> Digest: sha256:96ae58e574cb40b2caf8bdebc6dda7b789e1fae7d56346cc83c288374e18b1c2
+  --> Status: Downloaded newer image for docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+#Puis le déploie : Si 2ème lancement après erreur, seule cette ligne est affichée :
+  --> 468746c7580285e895e48f6e0dc1699f505ab20b5a7d028457237319a259bdba
+
+#################################################################################
+# Installation de kibana
+#################################################################################
+
+#Note : sous MacOS, retirez les double quotes " et les !
+export KIBANA_PASSWORD="KibPwd26!"
+echo $KIBANA_PASSWORD
+  --> KibPwd26!
+
+#Attention, il se peut que la connexion UPJV bloque, essayez en 4G si possible
+curl -u elastic:$ELASTIC_PASSWORD -X POST http://localhost:9200/_security/user/kibana_system/_password -d '{"password":"'"$KIBANA_PASSWORD"'"}' -H 'Content-Type: application/json'
+
+  --> {}
+  
+docker run -p 127.0.0.1:5601:5601 -d --name kibana --network elastic-net -e ELASTICSEARCH_URL=http://elasticsearch:9200 -e ELASTICSEARCH_HOSTS=http://elasticsearch:9200 -e ELASTICSEARCH_USERNAME=kibana_system -e ELASTICSEARCH_PASSWORD=$KIBANA_PASSWORD -e "xpack.security.enabled=false" -e "xpack.license.self_generated.type=basic" docker.elastic.co/kibana/kibana:8.14.3
+
+#Premier lancement de la commande, il télécharge Kibana
+  --> Unable to find image 'docker.elastic.co/kibana/kibana:8.14.3' locally
+  --> 8.14.3: Pulling from kibana/kibana
+  --> bef9b66d64c1: Already exists
+  --> e96b8a8bb9b6: Pull complete
+  --> c5ebb00a3ba3: Pull complete
+  --> fc5d8e56e022: Pull complete
+  --> 7e5153f69656: Pull complete
+  --> 4ca545ee6d5d: Pull complete
+  --> 7a26185a315d: Pull complete
+  --> 8ee238888e40: Pull complete
+  --> cfd1b5abbeae: Pull complete
+  --> 7400ccd73aa7: Pull complete
+  --> 87d17b54dcbd: Pull complete
+  --> 043e29222d7f: Pull complete
+  --> 814ed01bd3c7: Pull complete
+  --> b8a48fe9c44c: Pull complete
+  --> Digest: sha256:70740c7735524d4df593d2ef209f7d51e870cac51dc7ec589dfaa8ea17e32e24
+  --> Status: Downloaded newer image for docker.elastic.co/kibana/kibana:8.14.3
+#Puis le déploie : Si 2ème lancement après erreur, seule cette ligne est affichée :
+  --> 510ad06ec14c374e77eee97b11207d839717ae22e16ce99c8003aef44a823558
+
+#################################################################################
+# Accès aux outils
+#################################################################################
+
+docker container ls
+
+  --> CONTAINER ID   IMAGE                                                  COMMAND                  CREATED       STATUS          PORTS                                NAMES
+  --> ed5d0c9795f9   docker.elastic.co/kibana/kibana:8.14.3                 "/bin/tini -- /usr/l…"   3 weeks ago   Up 6 seconds    127.0.0.1:5601->5601/tcp             kibana
+  --> a37275b1ef78   docker.elastic.co/elasticsearch/elasticsearch:8.14.3   "/bin/tini -- /usr/l…"   3 weeks ago   Up 13 seconds   127.0.0.1:9200->9200/tcp, 9300/tcp   elasticsearch
+
+#Elastic
+Dans un navigateur web : http://localhost:9200/
+  --> Username : elastic 
+  --> Password : ElasPwd25!   # attention : sous MacOS, retirez le !
+
+  --> {
+  -->   "name" : "a37275b1ef78",
+  -->   "cluster_name" : "docker-cluster",
+  -->   "cluster_uuid" : "gPkXODx4Qaq2KDMPJMNong",
+  -->   "version" : {
+  -->     "number" : "8.14.3",
+  -->     "build_flavor" : "default",
+  -->     "build_type" : "docker",
+  -->     "build_hash" : "d55f984299e0e88dee72ebd8255f7ff130859ad0",
+  -->     "build_date" : "2024-07-07T22:04:49.882652950Z",
+  -->     "build_snapshot" : false,
+  -->     "lucene_version" : "9.10.0",
+  -->     "minimum_wire_compatibility_version" : "7.17.0",
+  -->     "minimum_index_compatibility_version" : "7.0.0"
+  -->   },
+  -->   "tagline" : "You Know, for Search"
+  --> }
+
+#Kibana
+Dans un navigateur web : http://127.0.0.1:5601
+  --> Username : elastic 
+  --> Password : ElasPwd25!   # attention : sous MacOS, retirez le !
+Choisir "Explore on my own", sauf si vous voulez faire le tour guidez 
+Menu burger (en haut à gauche) > Dev Tools  Vous arrivez sur la console
+
+Lancez :
+
+GET / dans la console de gauche
+
+  --> {
+  -->   "name": "a37275b1ef78",
+  -->   "cluster_name": "docker-cluster",
+  -->   "cluster_uuid": "gPkXODx4Qaq2KDMPJMNong",
+  -->   "version": {
+  -->     "number": "8.14.3",
+  -->     "build_flavor": "default",
+  -->     "build_type": "docker",
+  -->     "build_hash": "d55f984299e0e88dee72ebd8255f7ff130859ad0",
+  -->     "build_date": "2024-07-07T22:04:49.882652950Z",
+  -->     "build_snapshot": false,
+  -->     "lucene_version": "9.10.0",
+  -->     "minimum_wire_compatibility_version": "7.17.0",
+  -->     "minimum_index_compatibility_version": "7.0.0"
+  -->   },
+  -->   "tagline": "You Know, for Search"
+  --> }
+  
+POST books/_doc
+{"name": "Snow Crash", "author": "Neal Stephenson", "release_date": "1992-06-01", "page_count": 470}
+
+  --> {
+  -->   "_index": "books",
+  -->   "_id": "6YC9spABWHCixnNXgyVl",
+  -->   "_version": 1,
+  -->   "result": "created",
+  -->   "_shards": {
+  -->     "total": 2,
+  -->     "successful": 1,
+  -->     "failed": 0
+  -->   },
+  -->   "_seq_no": 0,
+  -->   "_primary_term": 1
+  --> }
+
+GET books/_search
+
+  --> {
+  -->   "took": 10,
+  -->   "timed_out": false,
+  -->   "_shards": {
+  -->     "total": 1,
+  -->     "successful": 1,
+  -->     "skipped": 0,
+  -->     "failed": 0
+  -->   },
+  -->   "hits": {
+  -->     "total": {
+  -->       "value": 1,
+  -->       "relation": "eq"
+  -->     },
+  -->     "max_score": 1,
+  -->     "hits": [
+  -->       {
+  -->         "_index": "books",
+  -->         "_id": "6YC9spABWHCixnNXgyVl",
+  -->         "_score": 1,
+  -->         "_source": {
+  -->           "name": "Snow Crash",
+  -->           "author": "Neal Stephenson",
+  -->           "release_date": "1992-06-01",
+  -->           "page_count": 470
+  -->         }
+  -->       }
+  -->     ]
+  -->   }
+  --> }
+
+#################################################################################
+# Arrêt / redémarrage
+#################################################################################
+
+docker start elasticsearch
+docker start kibana
+
+docker stop kibana
+docker stop elasticsearch

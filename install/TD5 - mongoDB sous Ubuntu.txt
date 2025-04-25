@@ -1,0 +1,215 @@
+# Fichier sh sous extension txt pour passer les antivirus.
+
+commande
+  --> résultat
+  #Commentaire
+
+#################################################################################
+# Installation du Shell mongo
+#################################################################################
+
+#Note : sous MacOS, suivre les instructions de ce lien : https://www.mongodb.com/docs/mongodb-shell/install/
+
+sudo vi /etc/apt/trusted.gpg.d/server-7.0.asc
+
+#Tapez a, puis coller (avec clic droit) ce texte (certificat) :
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+mQINBGPILWABEACqeWP/ktugdlWEyk7YTXo3n19+5Om4AlSdIyKv49vAlKtzCfMA
+QkZq3mfvjXiKMuLnL2VeElAJQIYcPoqnHf6tJbdrNv4AX2uI1cTsvGW7YS/2WNwJ
+C/+vBa4o+yA2CG/MVWZRbtOjkFF/W07yRFtNHAcgdmpIjdWgSnPQr9eIqLuWXIhy
+H7EerKsba227Vd/HfvKnAy30Unlsdywy7wi1FupzGJck0TPoOVGmsSpSyIQu9A4Z
+uC6TE/NcJHvaN0JuHwM+bQo9oWirGsZ1NCoVqSY8/sasdUc7T9r90MbUcH674YAR
+8OKYVBzU0wch4VTFhfHZecKHQnZf+V4dmP9oXnu4fY0/0w3l4jaew7Ind7kPg3yN
+hvgAkBK8yRAbSu1NOtHDNiRoHGEQFgct6trVOvCqHbN/VToLNtGk0rhKGOp8kuSF
+OJ02PJPxF3/zHGP8n8khCjUJcrilYPqRghZC8ZWnCj6GJVg6WjwLi+hPwNMi8xK6
+cjKhRW3eCy5Wcn73PzVBX9f7fSeFDJec+IfS47eNkxunHAOUMXa2+D+1xSWgEfK0
+PClfyWPgLIXY2pGQ6v8l3A6P5gJv4o38/E1h1RTcO3H1Z6cgZLIORZHPyAj50SPQ
+cjzftEcz56Pl/Cyw3eMYC3qlbABBgsdeb6KB6G5dkNxI4or3MgmxcwfnkwARAQAB
+tDdNb25nb0RCIDcuMCBSZWxlYXNlIFNpZ25pbmcgS2V5IDxwYWNrYWdpbmdAbW9u
+Z29kYi5jb20+iQI+BBMBAgAoBQJjyC1gAhsDBQkJZgGABgsJCAcDAgYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRAWDSa7F4W6OM+eD/sE7KbJyRNWyPCRTqqJXrXvyPqZtbFX
+8sio0lQ8ghn4f7lmb7LnFroUsmBeWaYirM8O3b2+iQ9oj4GeR3gbRZsEhFXQfL54
+SfrmG9hrWWpJllgPP7Six+jrzcjvkf1TENqw4jRP+cJhuihH1Gfizo9ktwwoN9Yr
+m7vgh+focEEmx8dysS38ApLxKlUEfTsE9bYsClgqyY1yrt3v4IpGbf66yfyBHNgY
+sObR3sngDRVbap7PwNyREGsuAFfKr/Dr37HfrjY7nsn3vH7hbDpSBh+H7a0b/chS
+mM60aaG4biWpvmSC7uxA/t0gz+NQuC4HL+qyNPUxvyIO+TwlaXfCI6ixazyrH+1t
+F7Bj5mVsne7oeWjRrSz85jK3Tpn9tj3Fa7PCDA6auAlPK8Upbhuoajev4lIydNd2
+70yO0idm/FtpX5a8Ck7KSHDvEnXpN70imayoB4Fs2Kigi2BdZOOdib16o5F/9cx9
+piNa7HotHCLTfR6xRmelGEPWKspU1Sm7u2A5vWgjfSab99hiNQ89n+I7BcK1M3R1
+w/ckl6qBtcxz4Py+7jYIJL8BYz2tdreWbdzWzjv+XQ8ZgOaMxhL9gtlfyYqeGfnp
+hYW8LV7a9pavxV2tLuVjMM+05ut/d38IkTV7OSJgisbSGcmycXIzxsipyXJVGMZt
+MFw3quqJhQMRsA==
+=gbRM
+-----END PGP PUBLIC KEY BLOCK-----
+
+#Tapez ESCAPE > :wq! > ENTER
+
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+  --> deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse
+  
+cat /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+  --> deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse
+
+sudo apt-get update
+  --> Ign:1 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 InRelease
+  --> Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease
+  --> Hit:3 http://security.ubuntu.com/ubuntu focal-security InRelease
+  --> Get:4 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 Release [2090 B]
+  --> Hit:5 http://archive.ubuntu.com/ubuntu focal-updates InRelease
+  --> Hit:6 http://archive.ubuntu.com/ubuntu focal-backports InRelease
+  --> Get:7 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 Release.gpg [866 B]
+  --> Get:8 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0/multiverse amd64 Packages [46.1 kB]
+  --> Get:9 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0/multiverse arm64 Packages [44.9 kB]
+  --> Fetched 94.0 kB in 2s (62.5 kB/s)
+  --> Reading package lists... Done
+
+sudo apt-get install -y mongodb-mongosh
+  --> Reading package lists... Done
+  --> Building dependency tree
+  --> Reading state information... Done
+  --> The following NEW packages will be installed:
+  -->   mongodb-mongosh
+  --> 0 upgraded, 1 newly installed, 0 to remove and 192 not upgraded.
+  --> Need to get 53.5 MB of archives.
+  --> After this operation, 264 MB of additional disk space will be used.
+  --> Get:1 https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0/multiverse amd64 mongodb-mongosh amd64 2.2.12 [53.5 MB]
+  --> Fetched 53.5 MB in 1min 12s (744 kB/s)
+  --> Selecting previously unselected package mongodb-mongosh.
+  --> (Reading database ... 32530 files and directories currently installed.)
+  --> Preparing to unpack .../mongodb-mongosh_2.2.12_amd64.deb ...
+  --> Unpacking mongodb-mongosh (2.2.12) ...
+  --> Setting up mongodb-mongosh (2.2.12) ...
+  --> Processing triggers for man-db (2.9.1-1) ...
+
+mongosh --version
+  --> 2.4.2 (avril 2025)
+
+
+#################################################################################
+# Installation de mongoDB
+#################################################################################
+
+docker pull mongodb/mongodb-community-server:latest
+#Premier lancement de la commande, il télécharge mongoDB
+  --> latest: Pulling from mongodb/mongodb-community-server
+  --> 3713021b0277: Pull complete
+  --> 551ef3fe83be: Pull complete
+  --> a4be957ec2ff: Pull complete
+  --> 83a442be5a10: Pull complete
+  --> 6a253c80ffab: Pull complete
+  --> 9d90780e5456: Pull complete
+  --> ffe5f090b81d: Pull complete
+  --> 1cce32c4cdc7: Pull complete
+  --> ba7f70c68b53: Pull complete
+  --> 4f4fb700ef54: Pull complete
+  --> 8098bbc797ea: Pull complete
+  --> Digest: sha256:4483960e1e2676e642108d0cbb5659ae6c5c8f98234fdc73f1ae9d9f5a612039
+  --> Status: Downloaded newer image for mongodb/mongodb-community-server:latest
+  --> docker.io/mongodb/mongodb-community-server:latest
+
+docker network create mongo-net
+
+docker run --name mongodb -d –-network mongo-net -p 27017:27017 mongodb/mongodb-community-server:latest
+  --> 997855be9dee4e1b0f10a90420871307808bcbf31d4d4eaf1cd55f3793e041f4
+
+#################################################################################
+# Installation de mongoExpress (optionnel)
+#################################################################################
+
+docker run –-name mongo-express --network mongo-net -p 8081:8081 -e ME_CONFIG_MONGODB_SERVER="mongodb" mongo-express
+
+  --> Vous verrez apparaitre des erreurs.
+  --> Une fois le travail terminé (message rouge), quittez : ctrl + C
+
+docker start mongo-express
+
+
+#################################################################################
+# Accès aux outils
+#################################################################################
+
+docker container ls
+  --> CONTAINER ID   IMAGE                                     COMMAND                  CREATED       STATUS              PORTS                      NAMES
+  --> 4b25a14abbf3   mongo-express                             "/sbin/tini -- /dock…"   3 weeks ago   Up 4 seconds        0.0.0.0:8081->8081/tcp     mongo-express
+  --> 205d4e9c0314   mongodb/mongodb-community-server:latest   "python3 /usr/local/…"   3 weeks ago   Up About a minute   0.0.0.0:27017->27017/tcp   mongodb
+
+
+#mongoSH
+
+mongosh --port 27017
+  --> Current Mongosh Log ID: 66953d2364bd9d23a7482f8a
+  --> Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.12
+  --> Using MongoDB:          7.0.12
+  --> Using Mongosh:          2.2.12
+  --> 
+  --> For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+  --> 
+  --> 
+  --> To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+  --> You can opt-out by running the disableTelemetry() command.
+  --> 
+  --> ------
+  -->    The server generated these startup warnings when booting
+  -->    2024-07-15T14:50:05.665+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+  -->    2024-07-15T14:50:06.401+00:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+  -->    2024-07-15T14:50:06.401+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never' in this binary version
+  -->    2024-07-15T14:50:06.401+00:00: vm.max_map_count is too low
+  --> ------
+
+test> db.runCommand(
+       {
+          hello: 1
+       }
+    )
+{
+
+  --> {
+  -->   isWritablePrimary: true,
+  -->   topologyVersion: {
+  -->     processId: ObjectId('6695371da0ca12bc42b27184'),
+  -->     counter: Long('0')
+  -->   },
+  -->   maxBsonObjectSize: 16777216,
+  -->   maxMessageSizeBytes: 48000000,
+  -->   maxWriteBatchSize: 100000,
+  -->   localTime: ISODate('2024-07-15T15:17:48.894Z'),
+  -->   logicalSessionTimeoutMinutes: 30,
+  -->   connectionId: 24,
+  -->   minWireVersion: 0,
+  -->   maxWireVersion: 21,
+  -->   readOnly: false,
+  -->   ok: 1
+  --> }
+
+test> use alexandreDB
+  --> switched to db alexandreDB
+
+test> db.AlexandreDB.insertOne( { item: "card", qty: 15 } )
+  --> {
+  -->   acknowledged: true,
+  -->   insertedId: ObjectId('67ecfd3d008e02e4e46b140b')
+  --> }
+
+#mongoExpress
+
+dans un navigateur web : http://127.0.0.1:8081/ 
+Username : admin
+Password : pass
+
+Menu local > on voit la base alexandreDB créée dans le shell mongo ci-dessus
+
+
+#################################################################################
+# Arrêt / redémarrage
+#################################################################################
+
+docker start mongodb
+docker start mongo-express
+
+docker stop mongo-express
+docker stop mongodb
