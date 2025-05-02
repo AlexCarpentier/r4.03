@@ -114,7 +114,7 @@ docker pull mongodb/mongodb-community-server:latest
 
 docker network create mongo-net
 
-docker run --name mongodb -d –-network mongo-net -p 27017:27017 mongodb/mongodb-community-server:latest
+docker run --name mongodb -d --network mongo-net -p 27017:27017 mongodb/mongodb-community-server:latest
   --> 997855be9dee4e1b0f10a90420871307808bcbf31d4d4eaf1cd55f3793e041f4
 
 #################################################################################
